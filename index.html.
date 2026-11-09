@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NICO'S HUB</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#090d18;color:white;font-family:Arial,sans-serif}
+header{text-align:center;padding:30px;background:#121d35}
+h1{color:#62ff9b;font-size:42px;margin:5px}
+header p{color:#c4d5e8}
+main{max-width:1100px;margin:auto;padding:20px}
+input{width:100%;padding:14px;border-radius:10px;border:0;font-size:16px}
+nav{display:flex;flex-wrap:wrap;gap:8px;margin:15px 0}
+button{padding:10px 14px;border:0;border-radius:9px;background:#243958;color:white;cursor:pointer}
+button:hover{background:#347c60}
+#games{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.card{background:#17243b;border:1px solid #314967;padding:18px;border-radius:13px;cursor:pointer}
+.card:hover{border-color:#62ff9b}
+.card h3{margin:5px 0;color:#62ff9b}
+#player{display:none;background:#111d31;padding:15px;border-radius:14px;margin-top:20px}
+iframe{width:100%;height:550px;border:0;border-radius:10px;background:white}
+#gameTitle{color:#62ff9b}
+footer{text-align:center;padding:25px;color:#9eacc0}
+</style>
+</head>
+<body>
+<header>
+<h1>🎮 NICO'S HUB</h1>
+<p>Games, sports, racing, adventure and more!</p>
+</header>
+<main>
+<input id="search" placeholder="🔎 Search games..." oninput="showGames()">
+<nav>
+<button onclick="filter('All')">All</button>
+<button onclick="filter('Sports')">Sports</button>
+<button onclick="filter('Adventure')">Adventure</button>
+<button onclick="filter('Racing')">Racing</button>
+<button onclick="filter('Tag')">Tag</button>
+<button onclick="filter('Magic')">Magic</button>
+<button onclick="filter('Street')">Street</button>
+<button onclick="filter('Puzzle')">Puzzles</button>
+</nav>
+<h2>Choose a game</h2>
+<div id="games"></div>
+<div id="player">
+<h2 id="gameTitle"></h2>
+<button onclick="closeGame()">← Back to Games</button>
+<button onclick="fullScreen()">⛶ Full Screen</button>
+<p id="gameMessage"></p>
+<iframe id="frame" allowfullscreen></iframe>
+</div>
+</main>
+<footer>NICO'S HUB • Have fun!</footer>
+<script>
+const gameList=[
+["2048","Puzzle","https://play2048.co/"],
+["Basketball","Sports","https://www.crazygames.com/t/basketball"],
+["Soccer","Sports","https://www.crazygames.com/t/soccer"],
+["Chess","Puzzle","https://www.chess.com/play"],
+["Bike Racing","Racing","https://www.crazygames.com/t/bike"],
+["Kart Racing","Racing","https://www.crazygames.com/t/kart"],
+["Adventure Games","Adventure","https://www.crazygames.com/t/adventure"],
+["Magic Games","Magic","https://www.crazygames.com/t/magic"],
+["Tag Games","Tag","https://www.crazygames.com/t/tag"],
+["Street Games","Street","https://www.crazygames.com/"]
+];
+let current="All";
+function filter(category){current=category;showGames()}
+function showGames(){
+const q=document.getElementById("search").value.toLowerCase();
+const area=document.getElementById("games");
+area.innerHTML="";
+gameList.filter(g=>(current==="All"||g[1]===current)&&g[0].toLowerCase().includes(q))
+.forEach(g=>{
+const card=document.createElement("div");
+card.className="card";
+card.innerHTML="<h3>🎮 "+g[0]+"</h3><small>"+g[1]+"</small>";
+card.onclick=()=>openGame(g);
+area.appendChild(card);
+});
+}
+function openGame(g){
+document.getElementById("player").style.display="block";
+document.getElementById("gameTitle").textContent=g[0];
+document.getElementById("frame").src=g[2];
+document.getElementById("gameMessage").textContent=
+"If the game allows embedding, it will play here. Some websites block this feature.";
+document.getElementById("player").scrollIntoView({behavior:"smooth"});
+}
+function closeGame(){
+document.getElementById("frame").src="about:blank";
+document.getElementById("player").style.display="none";
+}
+function fullScreen(){
+document.getElementById("frame").requestFullscreen?.();
+}
+showGames();
+</script>
+</body>
+</html>
